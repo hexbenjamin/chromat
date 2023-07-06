@@ -1,8 +1,9 @@
-from typing import Literal
+from typing import Any, Callable, Literal
 
 import flet as ft
 
 from ..util import ChroColor
+from ..widgets.settingslist import SettingsRow
 
 
 HCL_DICT = {
@@ -28,20 +29,24 @@ HCL_DICT = {
 
 
 class ColorPicker(ft.UserControl):
-    def __init__(self, swatch: ChroColor, **kwargs):
+    def __init__(self, **kwargs):
         super().__init__(**kwargs)
         # self.parent = parent
-        self.swatch = swatch
+        self.swatch = ChroColor("#000000")
+        self.caller: Any
+        self.submit: Callable
 
     def build(self):
         self.display = SwatchDisplay(self.swatch)
         self.slider_panel = SliderPanel(parent=self)
+        self.submit_button = ft.FilledButton("[ select ]", on_click=self.submit_called)
 
         return ft.Container(
             content=ft.Column(
                 [
                     self.display,
                     self.slider_panel,
+                    self.submit_button,
                 ],
                 expand=True,
                 alignment=ft.MainAxisAlignment.CENTER,
@@ -55,6 +60,9 @@ class ColorPicker(ft.UserControl):
         self.display.swatch.update(swatch)
         self.display.update_color()
         self.update()
+
+    def submit_called(self, e):
+        self.submit(self.swatch)
 
 
 class SwatchDisplay(ft.UserControl):

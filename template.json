@@ -1,0 +1,348 @@
+{
+  "general": [
+    {
+      "credit": {
+        "default": "author",
+        "optional": false
+      }
+    },
+    {
+      "color": {
+        "default": [
+          172,
+          192,
+          222
+        ],
+        "optional": false
+      }
+    },
+    {
+      "selection": {
+        "default": [
+          172,
+          192,
+          222
+        ],
+        "optional": false
+      }
+    },
+    {
+      "text": {
+        "default": [
+          255,
+          255,
+          255
+        ],
+        "optional": false
+      }
+    },
+    {
+      "accent": {
+        "default": [
+          86,
+          96,
+          111
+        ],
+        "optional": false
+      }
+    },
+    {
+      "bg": {
+        "default": [
+          0,
+          0,
+          0
+        ],
+        "optional": false
+      }
+    },
+    {
+      "bgaccent": {
+        "default": [
+          43,
+          48,
+          55
+        ],
+        "optional": false
+      }
+    },
+    {
+      "error_bar": {
+        "default": [
+          255,
+          127,
+          0
+        ],
+        "optional": true
+      }
+    }
+  ],
+  "waveform": [
+    {
+      "waveform": {
+        "default": [
+          255,
+          0,
+          255,
+          255
+        ],
+        "optional": true
+      }
+    },
+    {
+      "rgb_waveform_opacity_with_history": {
+        "default": 170,
+        "optional": true
+      }
+    },
+    {
+      "history_low": {
+        "default": [
+          255,
+          0,
+          0,
+          255
+        ],
+        "optional": true
+      }
+    },
+    {
+      "history_mid": {
+        "default": [
+          0,
+          255,
+          0,
+          255
+        ],
+        "optional": true
+      }
+    },
+    {
+      "history_high": {
+        "default": [
+          0,
+          0,
+          255,
+          255
+        ],
+        "optional": true
+      }
+    },
+    {
+      "waveform_low": {
+        "default": [
+          255,
+          0,
+          0
+        ],
+        "optional": true
+      }
+    },
+    {
+      "waveform_mid": {
+        "default": [
+          0,
+          255,
+          0
+        ],
+        "optional": true
+      }
+    },
+    {
+      "waveform_high": {
+        "default": [
+          50,
+          50,
+          255
+        ],
+        "optional": true
+      }
+    },
+    {
+      "waveform_hue_low": {
+        "default": 180,
+        "optional": true
+      }
+    },
+    {
+      "waveform_hue_high": {
+        "default": 540,
+        "optional": true
+      }
+    },
+    {
+      "waveform_invert_noise_brightness": {
+        "default": 0,
+        "optional": true
+      }
+    }
+  ],
+  "oscilloscope": [
+    {
+      "oscilloscope_main": {
+        "default": [
+          255,
+          0,
+          0
+        ],
+        "optional": true
+      }
+    },
+    {
+      "oscilloscope_bg": {
+        "default": [
+          0,
+          0,
+          255
+        ],
+        "optional": true
+      }
+    }
+  ],
+  "stereometer": [
+    {
+      "stereometer": {
+        "default": [
+          255,
+          255,
+          0
+        ],
+        "optional": true
+      }
+    },
+    {
+      "stereometer_low": {
+        "default": [
+          255,
+          0,
+          0
+        ],
+        "optional": true
+      }
+    },
+    {
+      "stereometer_mid": {
+        "default": [
+          0,
+          255,
+          0
+        ],
+        "optional": true
+      }
+    },
+    {
+      "stereometer_high": {
+        "default": [
+          0,
+          0,
+          255
+        ],
+        "optional": true
+      }
+    }
+  ],
+  "spectrum": [
+    {
+      "spectrum_analyzer_main": {
+        "default": [
+          255,
+          127,
+          255
+        ],
+        "optional": true
+      }
+    },
+    {
+      "spectrum_analyzer_secondary": {
+        "default": [
+          127,
+          255,
+          127
+        ],
+        "optional": true
+      }
+    },
+    {
+      "spectrum_analyzer_frequency_lines": {
+        "default": [
+          127,
+          255,
+          127
+        ],
+        "optional": true
+      }
+    },
+    {
+      "spectrum_analyzer_reference_line": {
+        "default": [
+          127,
+          255,
+          127
+        ],
+        "optional": true
+      }
+    },
+    {
+      "spectrum_analyzer_threshold_line": {
+        "default": [
+          255,
+          255,
+          0
+        ],
+        "optional": true
+      }
+    }
+  ],
+  "spectrogram": [
+    {
+      "spectrogram_low": {
+        "default": 260,
+        "optional": true
+      }
+    },
+    {
+      "spectrogram_high": {
+        "default": 420,
+        "optional": true
+      }
+    },
+    {
+      "color_bars_low": {
+        "default": 186,
+        "optional": true
+      }
+    },
+    {
+      "color_bars_high": {
+        "default": 385,
+        "optional": true
+      }
+    },
+    {
+      "color_bars_opacity": {
+        "default": 255,
+        "optional": true
+      }
+    },
+    {
+      "spectrogram_main": {
+        "default": [
+          255,
+          255,
+          255
+        ],
+        "optional": true
+      }
+    },
+    {
+      "color_bars_main": {
+        "default": [
+          255,
+          255,
+          255
+        ],
+        "optional": true
+      }
+    }
+  ]
+}

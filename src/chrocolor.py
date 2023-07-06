@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, List
 from coloraide import Color, util
 from coloraide.types import ColorInput, VectorLike
 
@@ -18,18 +18,18 @@ class ChroColor(Color):
         return ChroColor(converted)
 
     @property
-    def rgb(self):
+    def rgb(self) -> List[int]:
         return [round(c * 255) for c in self.convert("srgb").to_dict()["coords"]]
 
     @property
-    def hsl(self):
+    def hsl(self) -> List[int]:
         return [
             round(a * b)
             for a, b in zip(self.convert("hsl").to_dict()["coords"], [1, 100, 100])
         ]
 
     @property
-    def hex(self):
+    def hex(self) -> str:
         return self.convert("srgb").to_string(hex=True, upper=True)
 
     @property
