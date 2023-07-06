@@ -1,12 +1,6 @@
 {
   "general": [
     {
-      "credit": {
-        "default": "author",
-        "optional": false
-      }
-    },
-    {
       "color": {
         "default": [
           172,

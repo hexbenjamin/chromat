@@ -1,9 +1,9 @@
-from typing import Any, Callable, Literal
+from typing import Literal
 
 import flet as ft
 
-from ..util import ChroColor
-from ..widgets.settingslist import SettingsRow
+from chrocolor import ChroColor
+from setting import Setting
 
 
 HCL_DICT = {
@@ -11,42 +11,35 @@ HCL_DICT = {
         "full": "hue",
         "max": 360,
         "label": "{value}º",
-        "default": 180,
     },
     "C": {
         "full": "chroma",
         "max": 150,
         "label": "{value}",
-        "default": 75,
     },
     "L": {
         "full": "luminance",
         "max": 100,
         "label": "{value}%",
-        "default": 50,
     },
 }
 
 
 class ColorPicker(ft.UserControl):
-    def __init__(self, **kwargs):
+    def __init__(self, setting: Setting, **kwargs):
         super().__init__(**kwargs)
-        # self.parent = parent
-        self.swatch = ChroColor("#000000")
-        self.caller: Any
-        self.submit: Callable
+        self.setting = setting
+        self.swatch = ChroColor(self.setting.swatch)
 
     def build(self):
         self.display = SwatchDisplay(self.swatch)
         self.slider_panel = SliderPanel(parent=self)
-        self.submit_button = ft.FilledButton("[ select ]", on_click=self.submit_called)
 
         return ft.Container(
             content=ft.Column(
                 [
                     self.display,
                     self.slider_panel,
-                    self.submit_button,
                 ],
                 expand=True,
                 alignment=ft.MainAxisAlignment.CENTER,
@@ -59,10 +52,10 @@ class ColorPicker(ft.UserControl):
         self.swatch.update(swatch)
         self.display.swatch.update(swatch)
         self.display.update_color()
-        self.update()
+        self.setting.page.update()
 
-    def submit_called(self, e):
-        self.submit(self.swatch)
+    def write(self):
+        self.setting.update_color(self.swatch)
 
 
 class SwatchDisplay(ft.UserControl):
@@ -106,10 +99,12 @@ class SliderPanel(ft.UserControl):
         super().__init__(**kwargs)
         self.parent = parent
 
+        self.luminance, self.chroma, self.hue = self.parent.swatch.lch
+        self.h_slider = HCLSlider(parent=self, mode="H", init_value=self.hue)
+        self.c_slider = HCLSlider(parent=self, mode="C", init_value=self.chroma)
+        self.l_slider = HCLSlider(parent=self, mode="L", init_value=self.luminance)
+
     def build(self):
-        self.h_slider = HCLSlider(parent=self, mode="H")
-        self.c_slider = HCLSlider(parent=self, mode="C")
-        self.l_slider = HCLSlider(parent=self, mode="L")
         return ft.Card(
             content=ft.Column(
                 [
@@ -121,8 +116,17 @@ class SliderPanel(ft.UserControl):
         )
 
     def update_swatch(self):
-        l, c, h = self.l_slider.value, self.c_slider.value, self.h_slider.value
-        self.parent.update_swatch(ChroColor("lch", [l, c, h]))
+        self.parent.update_swatch(self.swatch)
+
+    @property
+    def swatch(self) -> ChroColor:
+        return ChroColor(
+            "lch", [self.l_slider.value, self.c_slider.value, self.h_slider.value]
+        )
+
+    @swatch.setter
+    def swatch(self, value: ChroColor):
+        self.luminance, self.chroma, self.hue = value.lch
 
 
 class HCLSlider(ft.UserControl):
@@ -130,12 +134,13 @@ class HCLSlider(ft.UserControl):
         self,
         parent: SliderPanel,
         mode: Literal["H", "C", "L"],
+        init_value: float = 0,
         **kwargs,
     ):
         super().__init__(**kwargs)
         self.parent = parent
         self.mode = mode
-        self.value = HCL_DICT[self.mode]["default"]
+        self.value = init_value
 
     def build(self):
         self.mode_obj = HCL_DICT[self.mode]
@@ -148,13 +153,20 @@ class HCLSlider(ft.UserControl):
             on_change=self.on_slider_change,
         )
 
-        self.slider.value = self.mode_obj["max"] / 2
+        self.slider.value = self.value
 
         return ft.Container(
             content=ft.ResponsiveRow(
                 controls=[
                     ft.Column(
-                        [ft.Text(self.mode, text_align=ft.TextAlign.RIGHT, size=24)],
+                        [
+                            ft.Text(
+                                self.mode,
+                                text_align=ft.TextAlign.RIGHT,
+                                size=24,
+                                style=ft.TextThemeStyle.HEADLINE_MEDIUM,
+                            )
+                        ],
                         col=1,
                         alignment=ft.MainAxisAlignment.END,
                     ),

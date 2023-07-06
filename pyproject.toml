@@ -17,3 +17,8 @@ license = {text = "GPL-v3-or-later"}
 [build-system]
 requires = ["pdm-backend"]
 build-backend = "pdm.backend"
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "rich>=13.4.2",
+]

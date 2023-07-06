@@ -1,80 +1,10 @@
+from typing import List
+
 import flet as ft
 
 from chrocolor import ChroColor
-
-
-class Setting(ft.Card):
-    def __init__(
-        self,
-        page: ft.Page,
-        parameter: str,
-        default_color: ChroColor,
-        optional: bool,
-        **kwargs,
-    ):
-        self.page: ft.Page = page
-        self.parameter = parameter
-        self.optional = optional
-        self.swatch = default_color
-
-        self.container = ft.Container(
-            content=ft.ResponsiveRow(
-                [
-                    ft.Column(
-                        [
-                            ft.Icon(
-                                ft.icons.STARS_ROUNDED,
-                                color=ft.colors.SURFACE_VARIANT
-                                if self.optional
-                                else ft.colors.GREEN_600,
-                            ),
-                        ],
-                        col=1,
-                        alignment=ft.MainAxisAlignment.END,
-                    ),
-                    ft.Column(
-                        [
-                            ft.Text(self.parameter),
-                        ],
-                        col=4,
-                        alignment=ft.MainAxisAlignment.END,
-                    ),
-                    ft.Column(
-                        [
-                            ft.Text(self.swatch.hex),
-                            ft.Text(", ".join([str(x) for x in self.swatch.rgb])),
-                        ],
-                        col=4,
-                        alignment=ft.MainAxisAlignment.END,
-                    ),
-                    ft.Column(
-                        [
-                            ft.FilledButton(
-                                "edit",
-                                icon=ft.icons.EDIT,
-                                on_click=self.edit_clicked,
-                            ),
-                        ],
-                        col=3,
-                        alignment=ft.MainAxisAlignment.END,
-                    ),
-                ],
-                alignment=ft.MainAxisAlignment.CENTER,
-                vertical_alignment=ft.CrossAxisAlignment.CENTER,
-            ),
-            padding=ft.Padding(12, 8, 12, 8),
-        )
-
-        super().__init__(content=self.container, **kwargs)
-
-    def edit_clicked(self, e):
-        self.make_theme()
-        self.swatch.update(ChroColor.random("srgb"))
-
-    def make_theme(self):
-        self.theme = ft.Theme(primary_swatch=self.swatch.hex, font_family="Space Mono")
-        self.container.theme = self.theme
-        self.page.update()
+from colorpicker import ColorPicker
+from setting import Setting
 
 
 class ChromatApp(ft.UserControl):
@@ -82,8 +12,47 @@ class ChromatApp(ft.UserControl):
         self.page: ft.Page = page
         super().__init__(**kwargs)
 
+        self.settings = [Setting(self, "test", ChroColor("#30ee90"), False)]
+        self.picker = ColorPicker(self.settings[0])
+
+        self.picker_dlg = ft.AlertDialog(
+            modal=True,
+            title=ft.Text("Please confirm"),
+            content=self.picker,
+            actions=[
+                ft.TextButton("cancel", on_click=self.close_picker),
+                ft.TextButton("save", on_click=self.save_color),
+            ],
+            actions_alignment=ft.MainAxisAlignment.END,
+        )
+
     def build(self):
-        return Setting(self.page, "test", ChroColor("#30ee90"), False)
+        return ft.ResponsiveRow(
+            [
+                ft.Column(
+                    controls=self.settings,  # type: ignore
+                    col=10,
+                ),
+            ],
+            expand=True,
+            alignment=ft.MainAxisAlignment.CENTER,
+            vertical_alignment=ft.CrossAxisAlignment.CENTER,
+        )
+
+    def open_picker(self, setting: Setting):
+        self.picker = ColorPicker(setting)
+        self.picker_dlg.content = self.picker
+        self.page.dialog = self.picker_dlg
+        self.picker_dlg.open = True
+        self.page.update()
+
+    def close_picker(self, e):
+        self.picker_dlg.open = False
+        self.page.update()
+
+    def save_color(self, e):
+        self.picker.write()
+        self.close_picker(e)
 
 
 def main(page: ft.Page):
@@ -123,7 +92,8 @@ def main(page: ft.Page):
         ],
     )
 
-    page.add(ChromatApp(page))
+    app = ChromatApp(page)
+    page.add(app)
 
 
 ft.app(main, assets_dir="../assets")

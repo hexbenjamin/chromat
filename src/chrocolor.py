@@ -2,6 +2,8 @@ from typing import Any, List
 from coloraide import Color, util
 from coloraide.types import ColorInput, VectorLike
 
+from rich import print
+
 
 class ChroColor(Color):
     def __init__(
@@ -21,12 +23,30 @@ class ChroColor(Color):
     def rgb(self) -> List[int]:
         return [round(c * 255) for c in self.convert("srgb").to_dict()["coords"]]
 
+    @rgb.setter
+    def rgb(self, value: List[int]):
+        floats = [c / 255 for c in value]
+        self.update(ChroColor("srgb", floats))
+
     @property
     def hsl(self) -> List[int]:
         return [
             round(a * b)
             for a, b in zip(self.convert("hsl").to_dict()["coords"], [1, 100, 100])
         ]
+
+    @hsl.setter
+    def hsl(self, value: List[int]):
+        floats = [a / b for a, b in zip(value, [1, 100, 100])]
+        self.update(ChroColor("hsl", floats))
+
+    @property
+    def lch(self) -> List[float]:
+        return self.convert("lch").to_dict()["coords"]
+
+    @lch.setter
+    def lch(self, value: List[float]):
+        self.update(ChroColor("lch", value))
 
     @property
     def hex(self) -> str:
@@ -40,3 +60,15 @@ class ChroColor(Color):
             return ChroColor("#000000")
         else:
             return ChroColor("#FFFFFF")
+
+
+if __name__ == "__main__":
+
+    def print_color():
+        print(f"[bold {color.hex}]{color.hex}[/]")
+
+    color = ChroColor("#30ee90")
+    print_color()
+
+    color.rgb = [255, 0, 0]
+    print_color()
