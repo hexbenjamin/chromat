@@ -12,13 +12,13 @@ HCL_DICT = {
         "max": 360,
         "label": "{value}º",
     },
-    "C": {
-        "full": "chroma",
-        "max": 150,
-        "label": "{value}",
+    "S": {
+        "full": "saturation",
+        "max": 100,
+        "label": "{value}%",
     },
     "L": {
-        "full": "luminance",
+        "full": "lightness",
         "max": 100,
         "label": "{value}%",
     },
@@ -81,7 +81,7 @@ class SwatchDisplay(ft.UserControl):
                 ),
                 padding=27,
             ),
-            width=270,
+            width=420,
             color=self.swatch.hex,
         )
 
@@ -99,19 +99,37 @@ class SliderPanel(ft.UserControl):
         super().__init__(**kwargs)
         self.parent = parent
 
-        self.luminance, self.chroma, self.hue = self.parent.swatch.lch
-        self.h_slider = HCLSlider(parent=self, mode="H", init_value=self.hue)
-        self.c_slider = HCLSlider(parent=self, mode="C", init_value=self.chroma)
-        self.l_slider = HCLSlider(parent=self, mode="L", init_value=self.luminance)
+        self.hue, self.saturation, self.lightness = self.parent.swatch.convert(
+            "hsl"
+        ).to_dict()["coords"]
+
+        self.h_slider = HCLSlider(
+            parent=self,
+            mode="H",
+            init_value=self.hue,
+        )
+        self.s_slider = HCLSlider(
+            parent=self,
+            mode="S",
+            init_value=round(self.saturation * 100),
+        )
+        self.l_slider = HCLSlider(
+            parent=self,
+            mode="L",
+            init_value=round(self.lightness * 100),
+        )
 
     def build(self):
         return ft.Card(
-            content=ft.Column(
-                [
-                    self.h_slider,
-                    self.c_slider,
-                    self.l_slider,
-                ],
+            content=ft.Container(
+                ft.Column(
+                    [
+                        self.h_slider,
+                        self.s_slider,
+                        self.l_slider,
+                    ],
+                ),
+                padding=16,
             ),
         )
 
@@ -121,19 +139,20 @@ class SliderPanel(ft.UserControl):
     @property
     def swatch(self) -> ChroColor:
         return ChroColor(
-            "lch", [self.l_slider.value, self.c_slider.value, self.h_slider.value]
+            "hsl",
+            [self.h_slider.value, self.s_slider.value / 100, self.l_slider.value / 100],
         )
 
     @swatch.setter
     def swatch(self, value: ChroColor):
-        self.luminance, self.chroma, self.hue = value.lch
+        self.hue, self.saturation, self.lightness = value.hsl
 
 
 class HCLSlider(ft.UserControl):
     def __init__(
         self,
         parent: SliderPanel,
-        mode: Literal["H", "C", "L"],
+        mode: Literal["H", "S", "L"],
         init_value: float = 0,
         **kwargs,
     ):

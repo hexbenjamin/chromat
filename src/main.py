@@ -17,7 +17,7 @@ class ChromatApp(ft.UserControl):
 
         self.picker_dlg = ft.AlertDialog(
             modal=True,
-            title=ft.Text("Please confirm"),
+            title=ft.Text("edit color"),
             content=self.picker,
             actions=[
                 ft.TextButton("cancel", on_click=self.close_picker),
@@ -27,16 +27,14 @@ class ChromatApp(ft.UserControl):
         )
 
     def build(self):
-        return ft.ResponsiveRow(
-            [
-                ft.Column(
-                    controls=self.settings,  # type: ignore
-                    col=10,
-                ),
-            ],
-            expand=True,
-            alignment=ft.MainAxisAlignment.CENTER,
-            vertical_alignment=ft.CrossAxisAlignment.CENTER,
+        return ft.Container(
+            content=ft.ListView(
+                controls=self.settings,  # type: ignore
+                expand=1,
+                spacing=10,
+                padding=20,
+                auto_scroll=True,
+            ),
         )
 
     def open_picker(self, setting: Setting):
@@ -93,7 +91,12 @@ def main(page: ft.Page):
     )
 
     app = ChromatApp(page)
-    page.add(app)
+    page.add(
+        ft.SafeArea(
+            app,
+            expand=True,
+        )
+    )
 
 
 ft.app(main, assets_dir="../assets")

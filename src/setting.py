@@ -27,9 +27,9 @@ class Setting(ft.UserControl):
             [
                 RGBPanel(self),
             ],
-            col=4,
             horizontal_alignment=ft.CrossAxisAlignment.END,
             expand=True,
+            col=8,
         )
 
         self.container = ft.Container(
@@ -44,27 +44,30 @@ class Setting(ft.UserControl):
                                 else ft.colors.AMBER_300,
                             ),
                         ],
-                        col=1,
-                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                        horizontal_alignment=ft.CrossAxisAlignment.START,
+                        expand=True,
+                        col=4,
                     ),
                     ft.Column(
                         [
-                            ft.Text(self.parameter, size=18),
+                            ft.Text(self.parameter, size=24),
                         ],
-                        col=3,
-                        horizontal_alignment=ft.CrossAxisAlignment.START,
+                        horizontal_alignment=ft.CrossAxisAlignment.END,
+                        expand=True,
+                        col=8,
                     ),
                     self.rgb_column,
                     ft.Column(
                         [
-                            ft.FilledButton(
+                            ft.ElevatedButton(
                                 "edit",
                                 icon=ft.icons.EDIT,
                                 on_click=self.edit_clicked,
                             ),
                         ],
-                        col=2,
                         horizontal_alignment=ft.CrossAxisAlignment.END,
+                        expand=True,
+                        col=4,
                     ),
                 ],
                 alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
@@ -102,28 +105,21 @@ class RGBPanel(ft.UserControl):
         super().__init__(**kwargs)
 
     def build(self):
-        r, g, b = [
-            round(x * 255) for x in ChroColor(self.swatch.hex).to_dict()["coords"]
-        ]
-
         return ft.Card(
             content=ft.Container(
-                content=ft.Column(
+                content=ft.Row(
                     [
                         ft.Text(
                             self.swatch.hex,
                             color=self.swatch.accent.hex,
                             style=ft.TextThemeStyle.HEADLINE_MEDIUM,
                         ),
-                        ft.Text(
-                            f"R{r} | G{g} | B{b}",
-                            color=self.swatch.accent.hex,
-                        ),
                     ],
                     alignment=ft.MainAxisAlignment.END,
-                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                    vertical_alignment=ft.CrossAxisAlignment.END,
                 ),
                 padding=ft.Padding(16, 8, 16, 8),
             ),
             color=self.swatch.hex,
+            expand=True,
         )
