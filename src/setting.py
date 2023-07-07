@@ -29,45 +29,50 @@ class Setting(ft.UserControl):
             ],
             horizontal_alignment=ft.CrossAxisAlignment.END,
             expand=True,
-            col=8,
+            col={"xs": 6, "sm": 5, "md": 5, "lg": 4, "xl": 4},
         )
 
         self.container = ft.Container(
             content=ft.ResponsiveRow(
                 [
+                    self.rgb_column,
+                    ft.Column(
+                        [
+                            ft.Text(
+                                self.parameter,
+                                size=24,
+                            ),
+                        ],
+                        horizontal_alignment=ft.CrossAxisAlignment.END,
+                        expand=True,
+                        col={"xs": 6, "sm": 7, "md": 7, "lg": 8, "xl": 8},
+                    ),
                     ft.Column(
                         [
                             ft.Icon(
                                 ft.icons.STARS_ROUNDED,
-                                color=ft.colors.SURFACE_VARIANT
+                                color=ft.colors.ON_SURFACE_VARIANT
                                 if self.optional
                                 else ft.colors.AMBER_300,
                             ),
                         ],
                         horizontal_alignment=ft.CrossAxisAlignment.START,
                         expand=True,
-                        col=4,
+                        col=6,
                     ),
-                    ft.Column(
-                        [
-                            ft.Text(self.parameter, size=24),
-                        ],
-                        horizontal_alignment=ft.CrossAxisAlignment.END,
-                        expand=True,
-                        col=8,
-                    ),
-                    self.rgb_column,
                     ft.Column(
                         [
                             ft.ElevatedButton(
                                 "edit",
                                 icon=ft.icons.EDIT,
                                 on_click=self.edit_clicked,
+                                color=ft.colors.ON_PRIMARY,
+                                bgcolor=ft.colors.PRIMARY,
                             ),
                         ],
                         horizontal_alignment=ft.CrossAxisAlignment.END,
                         expand=True,
-                        col=4,
+                        col=6,
                     ),
                 ],
                 alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
@@ -112,11 +117,11 @@ class RGBPanel(ft.UserControl):
                         ft.Text(
                             self.swatch.hex,
                             color=self.swatch.accent.hex,
-                            style=ft.TextThemeStyle.HEADLINE_MEDIUM,
+                            size=18,
                         ),
                     ],
-                    alignment=ft.MainAxisAlignment.END,
-                    vertical_alignment=ft.CrossAxisAlignment.END,
+                    alignment=ft.MainAxisAlignment.CENTER,
+                    vertical_alignment=ft.CrossAxisAlignment.CENTER,
                 ),
                 padding=ft.Padding(16, 8, 16, 8),
             ),

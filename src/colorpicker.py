@@ -69,6 +69,7 @@ class SwatchDisplay(ft.UserControl):
             color=self.swatch.accent.hex,
             style=ft.TextThemeStyle.HEADLINE_MEDIUM,
             text_align=ft.TextAlign.RIGHT,
+            size=24,
         )
         self.card = ft.Card(
             content=ft.Container(

@@ -4,6 +4,7 @@ import flet as ft
 
 from chrocolor import ChroColor
 from colorpicker import ColorPicker
+from database import get_picker_settings
 from setting import Setting
 
 
@@ -12,8 +13,24 @@ class ChromatApp(ft.UserControl):
         self.page: ft.Page = page
         super().__init__(**kwargs)
 
-        self.settings = [Setting(self, "test", ChroColor("#30ee90"), False)]
-        self.picker = ColorPicker(self.settings[0])
+        self.settings = [
+            Setting(
+                app=self,
+                parameter=setting["parameter"],
+                default_color=ChroColor(
+                    "srgb",
+                    [
+                        setting["value"]["red"] / 255,
+                        setting["value"]["green"] / 255,
+                        setting["value"]["blue"] / 255,
+                    ],
+                ),
+                optional=setting["optional"],
+            )
+            for setting in get_picker_settings("general")
+        ]
+
+        self.picker = ColorPicker(Setting(self, "temp", ChroColor("#000000"), False))
 
         self.picker_dlg = ft.AlertDialog(
             modal=True,
@@ -28,12 +45,23 @@ class ChromatApp(ft.UserControl):
 
     def build(self):
         return ft.Container(
-            content=ft.ListView(
-                controls=self.settings,  # type: ignore
-                expand=1,
-                spacing=10,
-                padding=20,
-                auto_scroll=True,
+            content=ft.ResponsiveRow(
+                [
+                    ft.Column(
+                        [
+                            ft.ListView(
+                                controls=self.settings,  # type: ignore
+                                expand=1,
+                                spacing=10,
+                                padding=20,
+                                auto_scroll=True,
+                            ),
+                        ],
+                        col={"xs": 12, "sm": 10, "md": 8, "lg": 6, "xl": 6},
+                    ),
+                ],
+                alignment=ft.MainAxisAlignment.CENTER,
+                vertical_alignment=ft.CrossAxisAlignment.CENTER,
             ),
         )
 
@@ -99,4 +127,5 @@ def main(page: ft.Page):
     )
 
 
-ft.app(main, assets_dir="../assets")
+if __name__ == "__main__":
+    ft.app(main, assets_dir="../assets")
