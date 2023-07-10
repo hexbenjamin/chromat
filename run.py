@@ -1,5 +1,5 @@
 import flet as ft
-from src.main import main as app_main
+from src.main import main as APP_FUNCTION
 
 
-ft.app(app_main, assets_dir="assets")
+ft.app(APP_FUNCTION, assets_dir="assets")
