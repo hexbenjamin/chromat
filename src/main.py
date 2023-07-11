@@ -1,4 +1,9 @@
+from typing import Optional
+
 import flet as ft
+
+from connector import Operator
+from panels import Panel
 
 
 """
@@ -24,15 +29,18 @@ COLORS = [
 ]
 """
 
-PANELS = []
+OPERATOR = Operator()
 
 
 # + PANELS DECORATOR FUNCTION
-def store_panel(function):
-    def wrapper(*args, **kwargs):
-        ref = function(*args, **kwargs)
-        PANELS.append(ref)
-        return ref
+def register(name: str):
+    def wrapper(func):
+        def func_wrapper(*args, **kwargs):
+            ref = func(*args, **kwargs)
+            OPERATOR.register(ref, name)
+            return ref
+
+        return func_wrapper
 
     return wrapper
 
@@ -47,42 +55,62 @@ class ChromatApp(ft.UserControl):
             controls=[
                 ft.Column(
                     controls=[
-                        ft.Container(
-                            ft.Text("SettingsPanel", weight=ft.FontWeight.BOLD),
-                            bgcolor=ft.colors.RED_200,
-                            expand=3,
-                            alignment=ft.alignment.center,
-                        ),
-                        ft.Container(
-                            ft.Text("IOPanel", weight=ft.FontWeight.BOLD),
-                            bgcolor=ft.colors.PURPLE_200,
-                            expand=1,
-                            alignment=ft.alignment.center,
-                        ),
+                        self.make_settings_panel(),
+                        self.make_io_panel(),
                     ],
                     expand=1,
                     alignment=ft.MainAxisAlignment.CENTER,
                 ),
                 ft.Column(
                     controls=[
-                        ft.Container(
-                            ft.Text("PickerPanel", weight=ft.FontWeight.BOLD),
-                            bgcolor=ft.colors.GREEN_200,
-                            expand=1,
-                            alignment=ft.alignment.center,
-                        ),
-                        ft.Container(
-                            ft.Text("ModesPanel", weight=ft.FontWeight.BOLD),
-                            bgcolor=ft.colors.LIGHT_BLUE_200,
-                            expand=1,
-                            alignment=ft.alignment.center,
-                        ),
+                        self.make_picker_panel(),
+                        self.make_modes_panel(),
                     ],
                     expand=1,
                     alignment=ft.MainAxisAlignment.CENTER,
                 ),
             ],
             expand=True,
+        )
+
+    # - PANELS
+
+    @register("settings")
+    def make_settings_panel(self):
+        return Panel(
+            OPERATOR,
+            content=ft.Text("SettingsPanel", weight=ft.FontWeight.BOLD),
+            bgcolor=ft.colors.RED_200,
+            expand=3,
+            alignment=ft.alignment.center,
+        )
+
+    @register("picker")
+    def make_picker_panel(self):
+        return ft.Container(
+            ft.Text("PickerPanel", weight=ft.FontWeight.BOLD),
+            bgcolor=ft.colors.GREEN_200,
+            expand=1,
+            alignment=ft.alignment.center,
+        )
+
+    @register("modes")
+    def make_modes_panel(self):
+        return ft.Container(
+            ft.Text("ModesPanel", weight=ft.FontWeight.BOLD),
+            bgcolor=ft.colors.LIGHT_BLUE_200,
+            expand=1,
+            alignment=ft.alignment.center,
+        )
+
+    @register("io")
+    def make_io_panel(self):
+        return Panel(
+            OPERATOR,
+            content=ft.Text("IOPanel", weight=ft.FontWeight.BOLD),
+            bgcolor=ft.colors.PURPLE_200,
+            expand=1,
+            alignment=ft.alignment.center,
         )
 
 
@@ -98,7 +126,8 @@ def main(page: ft.Page):
     }
 
     page.theme = ft.Theme(
-        color_scheme_seed=ft.colors.PURPLE_500, font_family="Space Mono"
+        color_scheme_seed=ft.colors.PURPLE_500,
+        font_family="Space Mono",
     )
 
     def app_logo():
