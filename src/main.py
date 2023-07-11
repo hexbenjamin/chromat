@@ -1,5 +1,28 @@
 import flet as ft
 
+"""
+from random import choice
+
+COLORS = [
+    ft.colors.RED,
+    ft.colors.DEEP_ORANGE,
+    ft.colors.ORANGE,
+    ft.colors.AMBER,
+    ft.colors.YELLOW,
+    ft.colors.LIME,
+    ft.colors.LIGHT_GREEN,
+    ft.colors.GREEN,
+    ft.colors.TEAL,
+    ft.colors.CYAN,
+    ft.colors.LIGHT_BLUE,
+    ft.colors.BLUE,
+    ft.colors.INDIGO,
+    ft.colors.DEEP_PURPLE,
+    ft.colors.PURPLE,
+    ft.colors.PINK,
+]
+"""
+
 
 def main(page: ft.Page):
     page.title = "chromat"
@@ -17,20 +40,37 @@ def main(page: ft.Page):
 
     def app_logo():
         img_path = (
-            "/img/chromat_white.png"
+            "/img/chromat_light.png"
             if page.theme_mode == ft.ThemeMode.DARK
-            else "/img/chromat_black.png"
+            else "/img/chromat_dark.png"
         )
+        blend_mode = (
+            ft.BlendMode.MULTIPLY
+            if page.theme_mode == ft.ThemeMode.DARK
+            else ft.BlendMode.SOFT_LIGHT
+        )
+
         return ft.Container(
-            content=ft.Image(src=img_path, fit=ft.ImageFit.CONTAIN, height=64),
-            padding=8,
+            content=ft.Container(
+                content=ft.Image(
+                    src=img_path,
+                    color=ft.colors.PRIMARY,
+                    color_blend_mode=blend_mode,
+                    fit=ft.ImageFit.COVER,
+                ),
+                bgcolor=ft.colors.ON_SURFACE_VARIANT,
+                border_radius=ft.border_radius.all(16),
+                clip_behavior=ft.ClipBehavior.HARD_EDGE,
+                height=44,
+            ),
+            padding=ft.Padding(8, 12, 8, 12),
         )
 
     page.appbar = ft.AppBar(
         leading=app_logo(),
-        leading_width=300,
+        leading_width=200,
         bgcolor=ft.colors.SURFACE_VARIANT,
-        toolbar_height=72,
+        toolbar_height=64,
     )
 
     def toggle_dark(e, app_bar: ft.AppBar = page.appbar):
@@ -51,11 +91,15 @@ def main(page: ft.Page):
 
     page.add(
         ft.SafeArea(
-            ft.Text("haha Yeet"),
+            ft.Column(
+                [ft.Text("haha Yeet")],
+                alignment=ft.MainAxisAlignment.CENTER,
+                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+            ),
             expand=True,
         )
     )
 
 
 if __name__ == "__main__":
-    ft.app(target=main, assets_dir="..\assets")
+    ft.app(target=main, assets_dir="..\\assets")
