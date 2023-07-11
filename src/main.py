@@ -2,8 +2,7 @@ from typing import Optional
 
 import flet as ft
 
-from connector import Operator
-from panels import Panel, PickerPanel
+from panels import Operator, Panel, PickerPanel
 
 
 """

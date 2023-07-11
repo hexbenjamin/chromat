@@ -1,3 +1,6 @@
+from dataclasses import dataclass
+from typing import Optional
+
 import flet as ft
 
 
@@ -12,6 +15,9 @@ class Panel(ft.Container):
     def receive(self, sender, property_name, message):
         setattr(self, property_name, message)
         self.update()
+
+    def request(self, target, property_name):
+        self.operator.request(self, target, property_name)
 
 
 class PickerPanel(Panel):
@@ -88,3 +94,37 @@ class PickerPanel(Panel):
         hue = self.hue_slider.value
         sat = self.sat_slider.value
         lum = self.lum_slider.value
+
+
+@dataclass
+class Signal:
+    sender: Panel
+    target: Panel
+    property_name: Optional[str]
+    message: Optional[str]
+
+
+class Operator:
+    def __init__(self):
+        self.panels = {}
+
+    def register(self, panel: Panel, name: str):
+        self.panels[name] = panel
+
+    def unregister(self, name: str):
+        self.panels.pop(name)
+
+    def broadcast(self, signal: Signal):
+        for name, panel in self.panels.items():
+            if name == signal.target:
+                panel.receive(
+                    sender=signal.sender,
+                    property_name=signal.property_name,
+                    message=signal.message,
+                )
+
+    def request(self, signal: Signal):
+        for name, panel in self.panels.items():
+            # if name == target:
+            # panel.receive()
+            pass
