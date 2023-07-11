@@ -1,5 +1,6 @@
 import flet as ft
 
+
 """
 from random import choice
 
@@ -23,7 +24,20 @@ COLORS = [
 ]
 """
 
+PANELS = []
 
+
+# + PANELS DECORATOR FUNCTION
+def store_panel(function):
+    def wrapper(*args, **kwargs):
+        ref = function(*args, **kwargs)
+        PANELS.append(ref)
+        return ref
+
+    return wrapper
+
+
+# + APP FUNCTION
 def main(page: ft.Page):
     page.title = "chromat"
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
@@ -89,13 +103,15 @@ def main(page: ft.Page):
         )
     ]
 
+    main_column = ft.Column(
+        controls=[ft.Text("haha Yeet !")],
+        alignment=ft.MainAxisAlignment.CENTER,
+        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+    )
+
     page.add(
         ft.SafeArea(
-            ft.Column(
-                [ft.Text("haha Yeet")],
-                alignment=ft.MainAxisAlignment.CENTER,
-                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-            ),
+            main_column,
             expand=True,
         )
     )
