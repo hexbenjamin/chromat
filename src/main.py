@@ -87,7 +87,7 @@ class ChromatApp(ft.UserControl):
 
     @register("picker")
     def make_picker_panel(self):
-        return PickerPanel(OPERATOR, expand=1)
+        return PickerPanel(OPERATOR, expand=3)
 
     @register("modes")
     def make_modes_panel(self):
@@ -95,7 +95,7 @@ class ChromatApp(ft.UserControl):
             OPERATOR,
             content=ft.Text("ModesPanel", weight=ft.FontWeight.BOLD),
             bgcolor=ft.colors.LIGHT_BLUE_200,
-            expand=1,
+            expand=5,
             alignment=ft.alignment.center,
         )
 

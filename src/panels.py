@@ -24,10 +24,7 @@ class PickerPanel(Panel):
             operator,
             content=ft.Container(
                 content=ft.Column(
-                    controls=[
-                        self.make_swatch(),
-                        self.make_sliders_panel(),
-                    ],
+                    controls=[self.make_sliders_panel()],
                     alignment=ft.MainAxisAlignment.SPACE_AROUND,
                     horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                 ),
@@ -45,21 +42,6 @@ class PickerPanel(Panel):
             divisions=max,
             label=f"{{value}}{symbol}",
             expand=True,
-        )
-
-    def make_swatch(self):
-        return ft.Container(
-            content=ft.Row(
-                controls=[
-                    ft.Card(
-                        content=ft.Container(
-                            content=ft.Text("#XXXXXX", size=21),
-                            alignment=ft.alignment.bottom_left,
-                            padding=ft.Padding(8, 16, 24, 8),
-                        )
-                    )
-                ]
-            ),
         )
 
     def make_sliders_panel(self):
