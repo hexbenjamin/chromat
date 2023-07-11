@@ -3,7 +3,7 @@ from typing import Optional
 import flet as ft
 
 from connector import Operator
-from panels import Panel
+from panels import Panel, PickerPanel
 
 
 """
@@ -87,17 +87,13 @@ class ChromatApp(ft.UserControl):
 
     @register("picker")
     def make_picker_panel(self):
-        return ft.Container(
-            ft.Text("PickerPanel", weight=ft.FontWeight.BOLD),
-            bgcolor=ft.colors.GREEN_200,
-            expand=1,
-            alignment=ft.alignment.center,
-        )
+        return PickerPanel(OPERATOR, expand=1)
 
     @register("modes")
     def make_modes_panel(self):
-        return ft.Container(
-            ft.Text("ModesPanel", weight=ft.FontWeight.BOLD),
+        return Panel(
+            OPERATOR,
+            content=ft.Text("ModesPanel", weight=ft.FontWeight.BOLD),
             bgcolor=ft.colors.LIGHT_BLUE_200,
             expand=1,
             alignment=ft.alignment.center,
