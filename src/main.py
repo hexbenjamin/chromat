@@ -37,6 +37,55 @@ def store_panel(function):
     return wrapper
 
 
+# + APP CLASS
+class ChromatApp(ft.UserControl):
+    def __init__(self):
+        super().__init__()
+
+    def build(self):
+        return ft.Row(
+            controls=[
+                ft.Column(
+                    controls=[
+                        ft.Container(
+                            ft.Text("SettingsPanel", weight=ft.FontWeight.BOLD),
+                            bgcolor=ft.colors.RED_200,
+                            expand=3,
+                            alignment=ft.alignment.center,
+                        ),
+                        ft.Container(
+                            ft.Text("IOPanel", weight=ft.FontWeight.BOLD),
+                            bgcolor=ft.colors.PURPLE_200,
+                            expand=1,
+                            alignment=ft.alignment.center,
+                        ),
+                    ],
+                    expand=1,
+                    alignment=ft.MainAxisAlignment.CENTER,
+                ),
+                ft.Column(
+                    controls=[
+                        ft.Container(
+                            ft.Text("PickerPanel", weight=ft.FontWeight.BOLD),
+                            bgcolor=ft.colors.GREEN_200,
+                            expand=1,
+                            alignment=ft.alignment.center,
+                        ),
+                        ft.Container(
+                            ft.Text("ModesPanel", weight=ft.FontWeight.BOLD),
+                            bgcolor=ft.colors.LIGHT_BLUE_200,
+                            expand=1,
+                            alignment=ft.alignment.center,
+                        ),
+                    ],
+                    expand=1,
+                    alignment=ft.MainAxisAlignment.CENTER,
+                ),
+            ],
+            expand=True,
+        )
+
+
 # + APP FUNCTION
 def main(page: ft.Page):
     page.title = "chromat"
@@ -103,17 +152,14 @@ def main(page: ft.Page):
         )
     ]
 
-    main_column = ft.Column(
-        controls=[ft.Text("haha Yeet !")],
-        alignment=ft.MainAxisAlignment.CENTER,
-        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-    )
-
     page.add(
         ft.SafeArea(
-            main_column,
+            ft.Container(
+                content=ChromatApp(),
+                padding=32,
+            ),
             expand=True,
-        )
+        ),
     )
 
 
